@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido de oração. </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #1ebe57;
+        }
+        .success-message {
+            display: none;
+            font-size: 1.1em;
+            color: #25D366;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="formContainer">
+        <h2>Envie seu pedido de oração.
+           <p></p> "De tarde, e de manhã, e ao meio-dia, orarei; 
+            e clamarei, e ele ouvirá a minha voz". Salmo 55:17
+
+        </h2>
+        <!-- Formulário configurado com Formspree -->
+        <form
+          action="https://formspree.io/f/mjkvqokg"
+          method="POST"
+          id="prayerForm"
+        >
+            <label for="name">Seu Nome:</label>
+            <input type="text" id="name" name="Nome" placeholder="Digite seu nome" required>
+
+            <label for="message">Seu Pedido de Oração:</label>
+            <textarea id="message" name="Pedido" rows="5" placeholder="Escreva seu pedido de oração" required></textarea>
+
+            <button type="submit">Enviar Pedido</button>
+        </form>
+        <!-- Mensagem de sucesso -->
+        <div class="success-message" id="successMessage">
+            <p>Seu pedido de oração foi enviado com sucesso!</p>
+        </div>
+    </div>
+
+    <script>
+        // Captura o formulário e os elementos
+        const form = document.getElementById("prayerForm");
+        const successMessage = document.getElementById("successMessage");
+        const formContainer = document.getElementById("formContainer");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Impede o comportamento padrão de envio
+
+            // Envia o formulário via Formspree
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Oculta o formulário e mostra a mensagem de sucesso
+                    form.style.display = "none";
+                    successMessage.style.display = "block";
+
+                    // Após 3 segundos, reinicia o formulário
+                    setTimeout(() => {
+                        form.reset();
+                        form.style.display = "block";
+                        successMessage.style.display = "none";
+                    }, 3000);
+                } else {
+                    alert("Houve um problema ao enviar seu pedido. Tente novamente.");
+                }
+            })
+            .catch(error => {
+                alert("Ocorreu um erro inesperado. Por favor, tente novamente.");
+            });
+        });
+    </script>
+</body>
+</html>
